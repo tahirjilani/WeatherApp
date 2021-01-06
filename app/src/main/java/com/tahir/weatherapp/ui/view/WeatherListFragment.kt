@@ -217,8 +217,6 @@ class WeatherListFragment : LocationAwareFragment(R.layout.fragment_weather_list
      */
     private fun menuClicked(anchorView: View){
 
-        val isCelsiusSelected = weatherListViewModel.getIsCelsius()
-
         val popup = PopupMenu(requireContext(), anchorView)
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -237,10 +235,8 @@ class WeatherListFragment : LocationAwareFragment(R.layout.fragment_weather_list
         }
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.settings_menu, popup.menu)
-        //my own photo
         popup.menu.also {
-
-            when (isCelsiusSelected) {
+            when (weatherListViewModel.getIsCelsius()) {
                 true -> {
                     it.findItem(R.id.celsius)?.isChecked = true
                 }
