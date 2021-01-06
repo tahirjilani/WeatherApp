@@ -35,7 +35,7 @@ class WeatherRepositoryImpl constructor(
     /**
      * Get cached resource if any otherwise return exception
      */
-    private fun getCacheData(ex: Exception): Resource<WeatherInfo> {
+    private suspend fun getCacheData(ex: Exception): Resource<WeatherInfo> {
         val cachedList = weatherDao.getAll()
         return if (!cachedList.isNullOrEmpty()){
             Resource.Success(cachedList[0].weatherInfo, ex.message)
@@ -47,7 +47,7 @@ class WeatherRepositoryImpl constructor(
     /**
      * Save data in room database
      */
-    private fun cacheData(weatherInfo: WeatherInfo?){
+    private suspend fun cacheData(weatherInfo: WeatherInfo?){
         weatherInfo?.let {
             try {
                 //lets replace existing record by passing same id, we can clear data before we insert

@@ -9,8 +9,8 @@ import androidx.room.Query
 interface WeatherDao {
 
     @Query("SELECT * FROM WeatherEntity")
-    fun getAll(): List<WeatherEntity>
+    suspend fun getAll(): List<WeatherEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(weatherEntity: WeatherEntity)
+    suspend fun insert(weatherEntity: WeatherEntity)
 }

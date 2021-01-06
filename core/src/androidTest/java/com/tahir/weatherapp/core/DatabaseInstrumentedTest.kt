@@ -11,6 +11,9 @@ import com.tahir.weatherapp.core.data.db.WeatherEntity
 import com.tahir.weatherapp.core.domain.model.Resource
 import com.tahir.weatherapp.core.domain.model.WeatherInfo
 import com.tahir.weatherapp.core.utils.TestUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.After
 
 import org.junit.Test
@@ -44,17 +47,19 @@ class DatabaseInstrumentedTest {
     @Throws(Exception::class)
     fun writeWeatherAndReadToVerify() {
 
-        val timeZone = "Asia/Dubai"
+        GlobalScope.launch(Dispatchers.IO) {
+            val timeZone = "Asia/Dubai"
 
-        val weatherInfo: WeatherInfo = TestUtils.createWeather(timeZone, converters)
-        weatherDao.insert(WeatherEntity(1, weatherInfo))
+            val weatherInfo: WeatherInfo = TestUtils.createWeather(timeZone, converters)
+            weatherDao.insert(WeatherEntity(1, weatherInfo))
 
-        val cachedList = weatherDao.getAll()
-        if (!cachedList.isNullOrEmpty()){
-            val cachedWeather = cachedList[0].weatherInfo
-            assertEquals(timeZone, cachedWeather.timezone)
-        }else{
-            fail("there is something wrong with database implementation")
+            val cachedList = weatherDao.getAll()
+            if (!cachedList.isNullOrEmpty()) {
+                val cachedWeather = cachedList[0].weatherInfo
+                assertEquals(timeZone, cachedWeather.timezone)
+            } else {
+                fail("there is something wrong with database implementation")
+            }
         }
     }
 
